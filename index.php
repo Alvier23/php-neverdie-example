@@ -13,6 +13,7 @@ try {
 
    // Siapkan statement SQL untuk users dan kelas
    $stmt_users = $db->prepare($sql_users);
+   // Siapkan statement SQL untuk kelas   // perubahan ada disini
    $stmt_classes = $db->prepare($sql_classes);
 
    // Eksekusi statement kelas dengan nama kelas baru
