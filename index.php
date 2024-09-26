@@ -20,3 +20,5 @@ $classes_result = $stmt_classes->fetch();
 // Ubah urutan print
 print_r($classes_result);
 print_r($users_result);
+
+echo "hello";
