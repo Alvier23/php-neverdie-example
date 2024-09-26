@@ -1,10 +1,10 @@
 <?php
 class Database
 {
-   private $host = "localhost"; // Ganti dengan host database Anda
-   private $db_name = "database_name"; // Ganti dengan nama database Anda
-   private $username = "username"; // Ganti dengan username database Anda
-   private $password = "password"; // Ganti dengan password database Anda
+   private $host = "localhost";
+   private $db_name = "koneksi_db";
+   private $username = "root";
+   private $password = "";
    private $conn;
 
    // Membuat koneksi ke database
