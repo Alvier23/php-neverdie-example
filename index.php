@@ -11,7 +11,7 @@ $stmt_2 = $db->prepare($sql_2);
 
 $stmt->execute(['email' => 'email@example.com']);
 
-$stmt_2->execute(['nama_kelas' => 'XII RPL 1']);
+$stmt_2->execute(['nama_kelas' => 'XII 1']);
 $result = $stmt->fetch();
 $result_2 = $stmt_2->fetch();
 
