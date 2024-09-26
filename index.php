@@ -13,10 +13,12 @@ try {
 
    // Siapkan statement SQL untuk users dan kelas
    $stmt_users = $db->prepare($sql_users);
+   // Siapkan statement SQL untuk kelas   // perubahan ada disini
    $stmt_classes = $db->prepare($sql_classes);
 
    // Eksekusi statement kelas dengan nama kelas baru
    $stmt_classes->execute(['class_name' => 'IPA 2']);
+   // Eksekusi statement users dengan email tertentu
    $stmt_users->execute(['email' => 'email@domain.com']);
 
    // Ambil hasil query
@@ -37,31 +39,36 @@ try {
    $user_fullname = $users_result['nama_lengkap'] ?? 'Nama tidak diketahui';
    $kelas_name = $classes_result['nama_kelas'] ?? 'Kelas tidak ada';
 
-   // Coba insert ke enrollment, ini akan menimbulkan konflik jika sudah ada entri yang sama
-   $sql_enroll = "INSERT INTO enrollment (user_id, class_id, tanggal_daftar) VALUES (:user_id, :class_id, NOW())";
-
-   // Simulasi konflik: Duplicate entry (Kita asumsikan user_id dan class_id harus unik di tabel enrollment)
-   $stmt_enroll = $db->prepare($sql_enroll);
-   $stmt_enroll->execute([
+   // Logika tambahan: Cek apakah user sudah terdaftar di kelas tersebut
+   $sql_check_enrollment = "SELECT * FROM enrollment WHERE user_id = :user_id AND class_id = :class_id";
+   $stmt_check_enrollment = $db->prepare($sql_check_enrollment);
+   $stmt_check_enrollment->execute([
       'user_id' => $users_result['id'],
       'class_id' => $classes_result['id']
    ]);
 
+   $enrollment_result = $stmt_check_enrollment->fetch(PDO::FETCH_ASSOC);
+
+   // Jika tidak terdaftar, lakukan pendaftaran
+   if (!$enrollment_result) {
+      $sql_enroll = "INSERT INTO enrollment (user_id, class_id, tanggal_daftar) VALUES (:user_id, :class_id, NOW())";
+      $stmt_enroll = $db->prepare($sql_enroll);
+      $stmt_enroll->execute([
+         'user_id' => $users_result['id'],
+         'class_id' => $classes_result['id']
+      ]);
+
+      echo "User {$user_fullname} berhasil didaftarkan ke kelas {$kelas_name}.<br>";
+   } else {
+      echo "User {$user_fullname} sudah terdaftar di kelas {$kelas_name}.<br>";
+   }
+
    // Commit transaksi
    $db->commit();
-
-   echo "User {$user_fullname} berhasil didaftarkan ke kelas {$kelas_name}.<br>";
-} catch (PDOException $e) {
-   // Rollback transaksi jika terjadi kesalahan
+} catch (Exception $e) {
+   // Rollback jika terjadi kesalahan
    $db->rollBack();
-
-   // Pengecekan konflik
-   if ($e->errorInfo[1] == 1062) {  // Error code 1062 untuk Duplicate entry
-      echo "Terjadi konflik: User {$user_fullname} sudah terdaftar di kelas {$kelas_name}.<br>";
-   } else {
-      // Error umum lainnya
-      echo "Terjadi kesalahan: " . $e->getMessage();
-   }
+   echo "Terjadi kesalahan: " . $e->getMessage();
 }
 
 // Cetak hasil user dan kelas untuk verifikasi tambahan
