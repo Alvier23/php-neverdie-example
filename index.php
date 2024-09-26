@@ -4,18 +4,22 @@ $database = new Database();
 $db = $database->connect();
 
 
-$sql = "SELECT * FROM users WHERE email = :email";
-$sql_2 = "SELECT * FROM kelas WHERE nama_kelas = :nama_kelas";
+$sql_users = "SELECT * FROM users WHERE email = :email";
+// Mengubah SQL kelas dan mengubah nama kolom
+$sql_classes = "SELECT * FROM kelas WHERE nama_kelas = :class_name";
 
-// Ubah urutan query dan variabel
-$stmt_2 = $db->prepare($sql_2);
-$stmt = $db->prepare($sql);
+// Ubah nama variabel dan urutan persiapan statement
+$stmt_classes = $db->prepare($sql_classes);
+$stmt_users = $db->prepare($sql_users);
 
-$stmt_2->execute(['nama_kelas' => 'MIPA 1']);
-$stmt->execute(['email' => 'email@example.com']);
+// Menambahkan data kelas baru untuk dieksekusi
+$stmt_classes->execute(['class_name' => 'IPA 2']);
+$stmt_users->execute(['email' => 'email@domain.com']);
 
-$result_2 = $stmt_2->fetch();
-$result = $stmt->fetch();
+// Menukar hasil fetch
+$classes_result = $stmt_classes->fetch();
+$users_result = $stmt_users->fetch();
 
-print_r($result);
-print_r($result_2);
+// Menukar urutan print dan menambahkan komentar baru
+print_r($users_result);
+print_r($classes_result);
