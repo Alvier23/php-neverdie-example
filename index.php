@@ -4,17 +4,19 @@ $database = new Database();
 $db = $database->connect();
 
 
-$sql = "SELECT * FROM users WHERE email = :email";
-$sql_2 = "SELECT * FROM kelas WHERE nama_kelas = :nama_kelas";
-$stmt = $db->prepare($sql);
-$stmt_2 = $db->prepare($sql_2);
+$sql_users = "SELECT * FROM users WHERE email = :email";
+$sql_classes = "SELECT * FROM kelas WHERE nama_kelas = :nama_kelas";
 
-$stmt->execute(['email' => 'email@example.com']);
+// Ubah nama variabel
+$stmt_users = $db->prepare($sql_users);
+$stmt_classes = $db->prepare($sql_classes);
 
-$stmt_2->execute(['nama_kelas' => 'MIPA 1']);
-$result = $stmt->fetch();
-$result_2 = $stmt_2->fetch();
+$stmt_users->execute(['email' => 'email@example.com']);
+$stmt_classes->execute(['nama_kelas' => 'MIPA 1']);
 
+$users_result = $stmt_users->fetch();
+$classes_result = $stmt_classes->fetch();
 
-print_r($result_2);
-print_r($result);
+// Ubah urutan print
+print_r($classes_result);
+print_r($users_result);
