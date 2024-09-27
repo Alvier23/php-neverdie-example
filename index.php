@@ -19,8 +19,7 @@ try {
    // Eksekusi statement kelas dengan nama kelas baru
    $stmt_classes->execute(['class_name' => 'IPA 2']);
    // Eksekusi statement users dengan email tertentu
-   // misal aku melakukan openambahan kode disini
-   echo "heloow world";
+   // asdasdasd
    $stmt_users->execute(['email' => 'email@domain.com']);
 
    // Ambil hasil query
