@@ -20,6 +20,7 @@ try {
    $stmt_classes->execute(['class_name' => 'IPA 2']);
    // Eksekusi statement users dengan email tertentu
    // asdasdasd
+   echo "hwllow";
    $stmt_users->execute(['email' => 'email@domain.com']);
 
    // Ambil hasil query
